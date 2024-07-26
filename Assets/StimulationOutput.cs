@@ -49,6 +49,11 @@ public class StimulationOutput : MonoBehaviour {
         if (t != null) {
             engagedContactRoutines.Add(id, StartCoroutine(engagedContactRoutine(t)));
         }
+
+        Movable m = other.GetComponent<Movable>();
+        if (m != null) {
+            engagedContactRoutines.Add(id, StartCoroutine(engagedContactRoutine(m)));
+        }
     }
 
 
@@ -59,12 +64,6 @@ public class StimulationOutput : MonoBehaviour {
             engagedContactRoutines.Remove(id);
         }
     }
-
-
-    
-
-   
-
 
     IEnumerator engagedContactRoutine(Touchable touchable) {
 
@@ -111,6 +110,57 @@ public class StimulationOutput : MonoBehaviour {
 
             //UI updates
             if(outputUI != null) outputUI.text.text = Mathf.RoundToInt(signalGenerator.signal.sineAmplitude * 100f)+"%";
+            yield return new WaitForFixedUpdate();
+        }
+    }
+
+
+    IEnumerator engagedContactRoutine(Movable movable) {
+
+        ContactParameters cp = new ContactParameters(surface.transform.position);
+        Vector3 direction; float distance; Vector3 velocity;
+        while (true) {
+            //interaction calculation
+            if (Physics.ComputePenetration(movable.collider, movable.transform.position, movable.transform.rotation, surface, surface.transform.position, surface.transform.rotation, out direction, out distance)) {
+
+                //outputs
+                cp.penetrationDirection = direction.normalized;
+                cp.penetrationDistance = distance * 1000f;  // in mm
+
+                //save previous
+                cp.previousPenetrationDistance = cp.penetrationDistance;
+                cp.previousPenetrationDirection = cp.penetrationDirection;
+                cp.previousPenetrationVelocity = cp.penetrationVelocity;
+                cp.previousPerpendicularVelocity = cp.perpendicularVelocity;
+                cp.previousPosition = cp.currentPosition;
+
+                //calculate new
+                cp.currentPosition = cp.positionFilter.getValue(surface.transform.position * 1000); // in mm
+                velocity = (cp.currentPosition - cp.previousPosition) / Time.fixedDeltaTime; //in mm/s
+                cp.penetrationVelocity = Vector3.Dot(velocity, cp.penetrationDirection); //in mm/s
+                cp.perpendicularVelocity = cp.velocityFilter.getValue((velocity.magnitude - (cp.penetrationVelocity * cp.penetrationDirection).magnitude)); // in mm/s
+
+            }
+
+            //movable update
+            movable.doMove(cp);
+
+            //signal generation
+            SignalData si = movable.materialSettings.getSignal(cp);
+            signalGenerator.loadPreset(si);
+
+
+            //  modulation
+            /*
+            if (simulateMotion && cp.perpendicularVelocity > minPerpendicularVelocity) {
+                signalGenerator.signal.ampModFrequency = cp.modulationFilter.getValue(touchable.materialSettings.getTextureFrequency(cp.perpendicularVelocity));
+            } else {
+                signalGenerator.signal.ampModFrequency = 0;
+            }*/
+
+
+            //UI updates
+            if (outputUI != null) outputUI.text.text = Mathf.RoundToInt(signalGenerator.signal.sineAmplitude * 100f) + "%";
             yield return new WaitForFixedUpdate();
         }
     }
