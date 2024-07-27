@@ -20,10 +20,16 @@ public class TouchableEditor : Editor{
         
         if (touchable.materialSettings != null) {
             EditorGUILayout.Space(20);
-            createMaterialSettingsFoldout(touchable.onMaterialSettingsUpdated, ref touchable.infoFoldout, ref settingsEditor);
-            EditorGUILayout.Space(10);
+            createMaterialSettingsFoldout(touchable.onSettingsUpdated, ref touchable.matInfoFoldout, ref settingsEditor);
         }
-        
+
+        if (touchable.objectSettings != null) {
+            EditorGUILayout.Space(20);
+            createObjectSettingsFoldout(touchable.onSettingsUpdated, ref touchable.objInfoFoldout, ref settingsEditor);
+        }
+
+        EditorGUILayout.Space(10);
+
     }
 
     void createMaterialSettingsFoldout(System.Action onSettingsUpdated, ref bool foldout, ref Editor editor) {
@@ -31,6 +37,21 @@ public class TouchableEditor : Editor{
         using (var check = new EditorGUI.ChangeCheckScope()) {
             if (foldout) {
                 CreateCachedEditor(touchable.materialSettings, null, ref editor);
+                editor.OnInspectorGUI();
+                if (check.changed) {
+                    if (onSettingsUpdated != null) {
+                        onSettingsUpdated();
+                    }
+                }
+            }
+        }
+    }
+
+    void createObjectSettingsFoldout(System.Action onSettingsUpdated, ref bool foldout, ref Editor editor) {
+        foldout = EditorGUILayout.InspectorTitlebar(foldout, touchable.objectSettings);
+        using (var check = new EditorGUI.ChangeCheckScope()) {
+            if (foldout) {
+                CreateCachedEditor(touchable.objectSettings, null, ref editor);
                 editor.OnInspectorGUI();
                 if (check.changed) {
                     if (onSettingsUpdated != null) {
