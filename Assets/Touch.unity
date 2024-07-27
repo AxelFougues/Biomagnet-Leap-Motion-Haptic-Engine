@@ -553,6 +553,7 @@ MonoBehaviour:
   matInfoFoldout: 1
   objInfoFoldout: 1
   initialPosition: {x: 0, y: 0, z: 0}
+  inPlace: 1
 --- !u!114 &171573874
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1210,6 +1211,7 @@ MonoBehaviour:
   matInfoFoldout: 1
   objInfoFoldout: 1
   initialPosition: {x: 0, y: 0, z: 0}
+  inPlace: 1
 --- !u!1001 &632564275
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2405,6 +2407,7 @@ MonoBehaviour:
   matInfoFoldout: 0
   objInfoFoldout: 0
   initialPosition: {x: 0, y: 0, z: 0}
+  inPlace: 1
 --- !u!114 &971721645 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7301542578039845813, guid: c55930d782899a54b8a075356072bed6,
@@ -3403,6 +3406,7 @@ MonoBehaviour:
   matInfoFoldout: 0
   objInfoFoldout: 1
   initialPosition: {x: 0, y: 0, z: 0}
+  inPlace: 1
 --- !u!64 &1621618182
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -4011,6 +4015,7 @@ MonoBehaviour:
   matInfoFoldout: 1
   objInfoFoldout: 1
   initialPosition: {x: 0, y: 0, z: 0}
+  inPlace: 1
 --- !u!1001 &1981627260
 PrefabInstance:
   m_ObjectHideFlags: 0

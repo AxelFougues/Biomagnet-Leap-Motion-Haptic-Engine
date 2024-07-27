@@ -25,10 +25,15 @@ public class Touchable : MonoBehaviour{
     [HideInInspector]
     public Vector3 initialPosition = Vector3.zero;
 
+    public bool inPlace = true;
+
     private void Start() {
         if(movableObject != null) initialPosition = movableObject.position;
     }
 
+    private void Update() {
+        if (objectSettings != null) objectSettings.update(this);
+    }
 
     public void onSettingsUpdated() {
         

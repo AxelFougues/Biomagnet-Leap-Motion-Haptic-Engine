@@ -12,6 +12,10 @@ public class ObjectSettings : ScriptableObject{
     public float maxDistance = 0;
     public AnimationCurve resistance;
 
+    [Space]
+
+    public float springBack = 0;
+
 
     public void doMove(ContactParameters cp, Touchable touchable) {
         if (touchable.movableObject == null) return;
@@ -34,6 +38,14 @@ public class ObjectSettings : ScriptableObject{
         }
 
         touchable.movableObject.transform.position = touchable.movableObject.transform.position + displacement;
+        touchable.inPlace = false;
+    }
+
+    public void update(Touchable touchable) {
+        if (!touchable.inPlace && springBack > 0) {
+            touchable.movableObject.position = Vector3.Lerp(touchable.movableObject.position, touchable.initialPosition, springBack * Time.deltaTime);
+            if (touchable.movableObject.position == touchable.initialPosition) touchable.inPlace = true;
+        }
     }
 
 }
