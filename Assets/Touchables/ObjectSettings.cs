@@ -21,7 +21,9 @@ public class ObjectSettings : ScriptableObject{
 
         //axis constraint
         if (constraintAxis != Vector3.zero) {
-            displacement = Vector3.Dot(displacement, constraintAxis.normalized) * constraintAxis.normalized;
+            float magnitude = Vector3.Project(displacement, constraintAxis).magnitude * Vector3.Dot(displacement.normalized, constraintAxis);
+            displacement = constraintAxis.normalized * magnitude;
+            if (Vector3.Angle(displacement, constraintAxis) > 0) return;
         }
 
         //resistance
