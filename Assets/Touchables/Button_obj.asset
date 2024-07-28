@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Button_obj
   m_EditorClassIdentifier: 
   constraintAxis: {x: 0, y: -1, z: 0}
-  maxDistance: 10
+  maxDistance: 20
   resistance:
     serializedVersion: 2
     m_Curve:

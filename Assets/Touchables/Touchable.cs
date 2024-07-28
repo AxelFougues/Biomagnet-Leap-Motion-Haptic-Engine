@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Touchable : MonoBehaviour{
@@ -27,12 +28,22 @@ public class Touchable : MonoBehaviour{
 
     public bool inPlace = true;
 
+    public int inContact = 0;
+
     private void Start() {
         if(movableObject != null) initialPosition = movableObject.position;
     }
 
     private void Update() {
-        if (objectSettings != null) objectSettings.update(this);
+        if (objectSettings != null && inContact == 0) objectSettings.doRelease(this);
+    }
+
+    public void onContactStart() {
+        inContact++;
+    }
+
+    public void onContactEnd() {
+        inContact--;
     }
 
     public void onSettingsUpdated() {

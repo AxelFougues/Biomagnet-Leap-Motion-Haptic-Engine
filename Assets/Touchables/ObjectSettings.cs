@@ -41,7 +41,7 @@ public class ObjectSettings : ScriptableObject{
         touchable.inPlace = false;
     }
 
-    public void update(Touchable touchable) {
+    public void doRelease(Touchable touchable) {
         if (!touchable.inPlace && springBack > 0) {
             touchable.movableObject.position = Vector3.Lerp(touchable.movableObject.position, touchable.initialPosition, springBack * Time.deltaTime);
             if (touchable.movableObject.position == touchable.initialPosition) touchable.inPlace = true;

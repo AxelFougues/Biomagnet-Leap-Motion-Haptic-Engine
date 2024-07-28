@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2235fd7449019024c8bbc958cde8e673, type: 3}
   m_Name: Button_mat
   m_EditorClassIdentifier: 
-  renderPressure: 0
+  renderPressure: 1
   pressureMaxDepth: 5
   pressureResponse:
     serializedVersion: 2
