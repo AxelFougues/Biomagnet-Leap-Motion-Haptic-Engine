@@ -134,6 +134,7 @@ MonoBehaviour:
   outputChannelID: 0
   simulateMotion: 1
   minPerpendicularVelocity: 10
+  noSignalPreset: {fileID: 11400000, guid: bd7cea223d8aec84d9ce444bdbeec0ec, type: 2}
   signalGenerator: {fileID: 4398953629190527886}
   audioSource: {fileID: 5859219666841339010}
   surface: {fileID: 3339584298489732637}
@@ -271,7 +272,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stereoPan: 0
   signal:
-    globalAmplitude: 0.152
+    globalAmplitude: 0
     sineAmplitude: 0
     sineFrequency: 0
     squareAmplitude: 0

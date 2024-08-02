@@ -22,7 +22,7 @@ public class StimulationOutput : MonoBehaviour {
     [Space]
     [Header("References")]
     [Space]
-
+    public SignalPreset noSignalPreset;
     public SignalGenerator signalGenerator;
     public AudioSource audioSource;
     public Collider surface;
@@ -50,7 +50,9 @@ public class StimulationOutput : MonoBehaviour {
             ContactParameters cp = new ContactParameters(surface.transform.position, t, this);
             activeContacts.Add(id, cp);
             t.onContactStart();
+            Debug.Log("OnTriggerEnter");
         }
+        
     }
 
     private void OnTriggerStay(Collider other) {
@@ -93,6 +95,8 @@ public class StimulationOutput : MonoBehaviour {
         //UI updates
         if (outputUI != null) outputUI.text.text = Mathf.RoundToInt(signalGenerator.signal.sineAmplitude * 100f) + "%";
 
+        Debug.Log("OnTriggerStay");
+
     }
 
 
@@ -102,7 +106,15 @@ public class StimulationOutput : MonoBehaviour {
         if (activeContacts.ContainsKey(id)) {
             activeContacts[id].touchable.onContactEnd();
             activeContacts.Remove(id);
+            exitCleanup();
+            Debug.Log("OnTriggerExit");
         }
+        
+    }
+
+    void exitCleanup() {
+        signalGenerator.loadPreset(noSignalPreset.data);
+        if (outputUI != null) outputUI.text.text = "0%";
     }
 
 
