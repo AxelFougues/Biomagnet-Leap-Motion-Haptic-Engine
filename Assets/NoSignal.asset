@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data:
     globalAmplitude: 0
-    sineAmplitude: 1
+    sineAmplitude: 0
     sineFrequency: 0
     squareAmplitude: 0
     squareFrequency: 0

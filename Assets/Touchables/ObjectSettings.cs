@@ -25,9 +25,10 @@ public class ObjectSettings : ScriptableObject{
 
         //axis constraint
         if (constraintAxis != Vector3.zero) {
-            float magnitude = Vector3.Project(displacement, constraintAxis).magnitude * Vector3.Dot(displacement.normalized, constraintAxis);
-            displacement = constraintAxis.normalized * magnitude;
-            if (Vector3.Angle(displacement, constraintAxis) > 0) return;
+            Vector3 globalAxis = touchable.movableObject.TransformDirection(constraintAxis);
+            float magnitude = Vector3.Project(displacement, globalAxis).magnitude * Vector3.Dot(displacement.normalized, globalAxis);
+            displacement = globalAxis.normalized * magnitude;
+            if (Vector3.Angle(displacement, globalAxis) > 0) return;
         }
 
         //resistance
