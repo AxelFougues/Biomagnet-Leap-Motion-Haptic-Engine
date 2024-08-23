@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5352861958723350900}
   - component: {fileID: 5311330666394303337}
   - component: {fileID: 3793314614527917050}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Sphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -96,7 +96,7 @@ GameObject:
   - component: {fileID: 3339584298489732637}
   - component: {fileID: 5859219666841339010}
   - component: {fileID: 4398953629190527886}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: StimulationOutput
   m_TagString: Untagged
   m_Icon: {fileID: 0}
