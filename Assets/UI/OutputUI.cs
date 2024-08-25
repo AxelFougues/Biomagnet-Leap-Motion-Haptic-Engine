@@ -9,7 +9,6 @@ public class OutputUI : MonoBehaviour{
     [Space]
     [Header("References")]
     [Space]
-    public Toggle toggle;
     public TMP_Text text;
     public TMP_Text idText;
 
@@ -22,18 +21,10 @@ public class OutputUI : MonoBehaviour{
             stimulationOutput.setUI(this);
             idText.text = matchingID;
             text.text = "0%";
-            toggle.onValueChanged.AddListener(onToggle);
 
         } else {
             Destroy(gameObject);
         }
         
-    }
-
-
-    public void onToggle(bool value) {
-        stimulationOutput.gameObject.SetActive(value);
-        if (value) text.text = "0%";
-        else text.text = "--";
     }
 }

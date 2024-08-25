@@ -37,6 +37,9 @@ public class StimulationOutput : MonoBehaviour {
         this.outputUI = outputUI;
     }
 
+    public void setStereoPan(int pan) {
+        audioSource.panStereo = pan;
+    }
 
     //Contact
 
