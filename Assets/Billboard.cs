@@ -4,11 +4,9 @@ using UnityEngine;
 
 public class Billboard : MonoBehaviour{
 
-    public Transform reference;
-
     void Update(){
 
-        transform.LookAt(reference.position);
+        transform.LookAt(PlayerRefs.instance.playerCamera.transform.position);
         
     }
 }
