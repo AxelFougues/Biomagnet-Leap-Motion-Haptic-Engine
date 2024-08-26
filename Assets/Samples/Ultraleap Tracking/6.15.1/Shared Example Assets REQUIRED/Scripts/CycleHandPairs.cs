@@ -45,15 +45,17 @@ namespace Leap.Unity.HandsModule.Examples
                 return;
             }
 
-            if (Input.GetKeyUp(KeyCode.RightArrow))
+            if (Input.GetKeyUp(KeyCode.H))
             {
                 NextHandSet();
             }
 
+            /*
             if (Input.GetKeyUp(KeyCode.LeftArrow))
             {
                 PreviousHandSet();
             }
+            */
         }
 
         private void NextHandSet()
