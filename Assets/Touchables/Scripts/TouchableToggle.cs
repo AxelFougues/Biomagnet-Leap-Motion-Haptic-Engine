@@ -31,8 +31,8 @@ public class TouchableToggle : TouchableMovable {
     public bool isTriggered = false;
     public bool hasLatched = false;
 
-    public override void onContact(ContactParameters cp) {
-        base.onContact(cp);
+    public override SignalData onContact(ContactParameters cp) {
+        
         float depth = Vector3.Distance(movableObject.position, initialPosition) * 1000;
         //Pressing
         if (!isTriggered && !hasLatched && depth >= triggerDepth) {
@@ -52,6 +52,8 @@ public class TouchableToggle : TouchableMovable {
             cp.stimulationOutput.audioSource.PlayOneShot(unTriggerReleaseFeedback);
             hasLatched = false;
         }
+
+        return base.onContact(cp);
     }
 
     public void trigger(bool state) {

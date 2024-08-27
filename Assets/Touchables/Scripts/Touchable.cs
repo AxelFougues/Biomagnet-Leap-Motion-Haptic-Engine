@@ -66,7 +66,7 @@ public class Touchable : MonoBehaviour{
         inContact++;
     }
 
-    public virtual void onContact(ContactParameters cp) {
+    public virtual SignalData onContact(ContactParameters cp) {
         SignalData si = new SignalData();
 
         foreach (SignalParameterConstant spc in constantParameters) si.set(spc.signalParameter, spc.value);
@@ -91,7 +91,7 @@ public class Touchable : MonoBehaviour{
             }
         }
 
-        cp.stimulationOutput.signalGenerator.loadPreset(si);
+        return si;
     }
 
     public void onContactEnd() {

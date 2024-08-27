@@ -33,9 +33,9 @@ public class TouchableMovable : Touchable{
         if (inContact == 0) onNoContact();
     }
 
-    public override void onContact(ContactParameters cp) {
-        base.onContact(cp);
-        if (movableObject == null) return;
+    public override SignalData onContact(ContactParameters cp) {
+        
+        if (movableObject == null) return base.onContact(cp);
 
         //displacement
         Vector3 displacement = cp.penetrationDirection * cp.penetrationDistance / 1000f;
@@ -45,7 +45,7 @@ public class TouchableMovable : Touchable{
             Vector3 globalAxis = movableObject.TransformDirection(constraintAxis);
             float magnitude = Vector3.Project(displacement, globalAxis).magnitude * Vector3.Dot(displacement.normalized, globalAxis);
             displacement = globalAxis.normalized * magnitude;
-            if (Vector3.Angle(displacement, globalAxis) > 0) return;
+            if (Vector3.Angle(displacement, globalAxis) > 0) return base.onContact(cp);
         }
 
         //resistance
@@ -57,6 +57,8 @@ public class TouchableMovable : Touchable{
 
         movableObject.transform.position = movableObject.transform.position + displacement;
         inPlace = false;
+
+        return base.onContact(cp);
     }
 
     protected virtual void onNoContact() {

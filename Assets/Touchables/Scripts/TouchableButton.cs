@@ -30,8 +30,8 @@ public class TouchableButton : TouchableMovable{
 
     
 
-    public override void onContact(ContactParameters cp) {
-        base.onContact(cp);
+    public override SignalData onContact(ContactParameters cp) {
+        
         float depth = Vector3.Distance(movableObject.position, initialPosition) * 1000;
         //Pressing
         if (!isTriggered && depth >= triggerDepth) {
@@ -43,6 +43,8 @@ public class TouchableButton : TouchableMovable{
             doTrigger(false);
             cp.stimulationOutput.audioSource.PlayOneShot(unTriggerReleaseFeedback);
         }
+
+        return base.onContact(cp);
     }
 
     protected override void onNoContact() {

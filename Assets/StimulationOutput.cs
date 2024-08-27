@@ -20,6 +20,12 @@ public class StimulationOutput : MonoBehaviour {
     public float minPerpendicularVelocity = 1f;
 
     [Space]
+    [Header("Equalization")]
+    [Space]
+    public bool doEqualization = true;
+    public AnimationCurve equalization;
+
+    [Space]
     [Header("References")]
     [Space]
     public SignalPreset noSignalPreset;
@@ -83,7 +89,15 @@ public class StimulationOutput : MonoBehaviour {
 
             }
 
-            cp.touchable.onContact(cp);
+            SignalData sd = cp.touchable.onContact(cp);
+
+            //Equalization
+            if (doEqualization) {
+                if (sd.sineAmplitude > 0) Mathf.Clamp01(sd.sineAmplitude *= equalization.Evaluate(sd.sineFrequency));
+                if (sd.sawAmplitude > 0) Mathf.Clamp01(sd.sawAmplitude *= equalization.Evaluate(sd.sawFrequency));
+                if (sd.squareAmplitude > 0) Mathf.Clamp01(sd.squareAmplitude *= equalization.Evaluate(sd.squareFrequency));
+            }
+            signalGenerator.loadPreset(sd);
 
             //UI updates
             if (outputUI != null) outputUI.text.text = Mathf.RoundToInt(signalGenerator.signal.sineAmplitude * 100f) + "%";

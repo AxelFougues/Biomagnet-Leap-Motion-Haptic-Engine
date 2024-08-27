@@ -48,7 +48,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 166313211478259854}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -134,6 +134,31 @@ MonoBehaviour:
   outputChannelID: 0
   simulateMotion: 1
   minPerpendicularVelocity: 10
+  doEqualization: 1
+  equalization:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   noSignalPreset: {fileID: 11400000, guid: bd7cea223d8aec84d9ce444bdbeec0ec, type: 2}
   signalGenerator: {fileID: 4398953629190527886}
   audioSource: {fileID: 5859219666841339010}
