@@ -11,6 +11,8 @@ public class POI : MonoBehaviour{
     public Transform cameraAnchor;
     public Transform handTrackingAnchor;
     [Space]
+    public List<GameObject> proximityActivated = new List<GameObject>();
+    [Space]
     public bool unlockCursor = false;
     public bool useHandTracking = true;
 
@@ -20,6 +22,7 @@ public class POI : MonoBehaviour{
 
     private void Start() {
         floatingUI.gameObject.SetActive(false);
+        foreach (GameObject go in proximityActivated) go.SetActive(false);
     }
 
     private void OnTriggerEnter(Collider other) {
@@ -27,6 +30,7 @@ public class POI : MonoBehaviour{
             playerIsNear = true;
             floatingUI.gameObject.SetActive(true);
             fill.fillAmount = 0;
+            foreach (GameObject go in proximityActivated) if (go != null) go.SetActive(true);
         }
     }
 
@@ -40,12 +44,11 @@ public class POI : MonoBehaviour{
         }
     }
 
-
     private void OnTriggerExit(Collider other) {
         if (other.gameObject.layer == LayerMask.NameToLayer("Player")) {
             playerIsNear = false;
             floatingUI.gameObject.SetActive(false);
-
+            foreach (GameObject go in proximityActivated) if (go != null) go.SetActive(false);
         }
     }
 
