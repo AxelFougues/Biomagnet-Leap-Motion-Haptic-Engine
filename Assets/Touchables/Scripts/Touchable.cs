@@ -62,7 +62,7 @@ public class Touchable : MonoBehaviour{
     public class SignalParameterConstant { public SignalParameter signalParameter = SignalParameter.GlobalAmplitude; public float value = 0; }
 
 
-    public void onContactStart() {
+    public virtual void onContactStart() {
         inContact++;
     }
 
@@ -94,7 +94,7 @@ public class Touchable : MonoBehaviour{
         return si;
     }
 
-    public void onContactEnd() {
+    public virtual void onContactEnd() {
         inContact--;
     }
 

@@ -4,18 +4,15 @@
 //
 // "Enable/Disable Headbob, Changed look rotations - should result in reduced camera jitters" || version 1.0.1
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 #if UNITY_EDITOR
     using UnityEditor;
-    using System.Net;
 #endif
 
-public class FirstPersonController : MonoBehaviour
-{
+public class FirstPersonController : MonoBehaviour{
+
     private Rigidbody rb;
 
     #region Camera Movement Variables
@@ -55,6 +52,8 @@ public class FirstPersonController : MonoBehaviour
 
     #region Movement Variables
 
+    public bool keyboardTurning = true;
+    public float keyboardTurningSpeed = 2;
     public bool playerCanMove = true;
     public float walkSpeed = 5f;
     public float maxVelocityChange = 10f;
@@ -373,14 +372,18 @@ public class FirstPersonController : MonoBehaviour
             // Calculate how fast we should be moving
             Vector3 targetVelocity = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
 
+            
+
+            if (keyboardTurning){
+                transform.Rotate(Vector3.up, targetVelocity.x * keyboardTurningSpeed);
+                targetVelocity.x /= 10;
+            }
+
             // Checks if player is walking and isGrounded
             // Will allow head bob
-            if (targetVelocity.x != 0 || targetVelocity.z != 0 && isGrounded)
-            {
+            if (targetVelocity.x != 0 || targetVelocity.z != 0 && isGrounded) {
                 isWalking = true;
-            }
-            else
-            {
+            } else {
                 isWalking = false;
             }
 
@@ -427,6 +430,7 @@ public class FirstPersonController : MonoBehaviour
 
                 targetVelocity = transform.TransformDirection(targetVelocity) * walkSpeed;
 
+
                 // Apply a force that attempts to reach our target velocity
                 Vector3 velocity = rb.velocity;
                 Vector3 velocityChange = (targetVelocity - velocity);
@@ -436,6 +440,8 @@ public class FirstPersonController : MonoBehaviour
 
                 rb.AddForce(velocityChange, ForceMode.VelocityChange);
             }
+
+            
         }
 
         #endregion
@@ -526,6 +532,10 @@ public class FirstPersonController : MonoBehaviour
             joint.localPosition = new Vector3(Mathf.Lerp(joint.localPosition.x, jointOriginalPos.x, Time.deltaTime * bobSpeed), Mathf.Lerp(joint.localPosition.y, jointOriginalPos.y, Time.deltaTime * bobSpeed), Mathf.Lerp(joint.localPosition.z, jointOriginalPos.z, Time.deltaTime * bobSpeed));
         }
     }
+
+    public void setkeyboardTurning(bool value) {
+        keyboardTurning = value;
+    }
 }
 
 
@@ -615,9 +625,15 @@ public class FirstPersonController : MonoBehaviour
         EditorGUILayout.Space();
 
         fpc.playerCanMove = EditorGUILayout.ToggleLeft(new GUIContent("Enable Player Movement", "Determines if the player is allowed to move."), fpc.playerCanMove);
-
         GUI.enabled = fpc.playerCanMove;
+
         fpc.walkSpeed = EditorGUILayout.Slider(new GUIContent("Walk Speed", "Determines how fast the player will move while walking."), fpc.walkSpeed, .1f, fpc.sprintSpeed);
+        GUI.enabled = true;
+
+        fpc.keyboardTurning = EditorGUILayout.ToggleLeft(new GUIContent("Keboard Turning", "Determines if the player is turned by Horizontal keys."), fpc.keyboardTurning);
+        GUI.enabled = fpc.keyboardTurning;
+
+        fpc.keyboardTurningSpeed = EditorGUILayout.Slider(new GUIContent("Keboard Turning Speed", "Determines how fast the player will turn."), fpc.keyboardTurningSpeed, .1f, 10f);
         GUI.enabled = true;
 
         EditorGUILayout.Space();
