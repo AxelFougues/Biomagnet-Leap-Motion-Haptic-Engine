@@ -16,9 +16,14 @@ public class TouchableTrigger : Touchable{
     [Space]
     [Header("Debug")]
     [Space]
+    public bool autoTriggerInEditor = false;
     public bool isTriggered = false;
 
-
+    private void Start() {
+#if UNITY_EDITOR
+        if (autoTriggerInEditor) onContactStart();
+#endif
+    }
 
     public override void onContactStart() {
         base.onContactStart();
