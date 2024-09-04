@@ -4,90 +4,103 @@ using UnityEngine;
 
 public class VectorField : MonoBehaviour{
 
-    public List<Transform> vectors;
-    public float maxDistance = 10f;
+    [Range(0,1)]
+    public float scale = 1;
+    [Range(0,10)]
+    public float distancePower = 1;
+    [Space]
+    [Header("Gizmos")]
+    [Space]
+    public bool showVectors = true;
+    public bool showStrength = true;
+    public bool showDirection = true;
+    public bool showMagnitude = true;
     [Space]
     public Vector3 gizmoScale = Vector3.one;
     public Vector3Int gizmoCount = Vector3Int.one * 10;
     public Gradient gizmoColor = new Gradient();
 
-    public float sampleDirectional(Vector3 position, Quaternion rotation) {
-        if(vectors.Count == 0) return 0;
+
+    public float sampleAlignement(Vector3 position, Quaternion rotation) {
+        if (transform.childCount == 0) return 0;
         Quaternion localRotation = Quaternion.Euler(getDirection(position));
-        return 1f - (Quaternion.Angle(rotation, localRotation) / 180f);
+        return Quaternion.Angle(rotation, localRotation);
     }
+    public float sampleAlignementNormalized(Vector3 position, Quaternion rotation) { return 1f - sampleAlignement(position, rotation) / 180f; }
+    public float sampleAlignement(Transform transform) { return sampleAlignement(transform.position, transform.rotation); }
+    public float sampleAlignementNormalized(Transform transform) { return sampleAlignementNormalized(transform.position, transform.rotation); }
 
-    //Returns a normalized vector if all vector's scale.z is 0-1
     public Vector3 getDirection(Vector3 point) {
-        if (vectors.Count == 0) return Vector3.zero;
+        if (transform.childCount == 0) return Vector3.zero;
         Vector3 direction = Vector3.zero;
-        float sumWeights = 0;
 
-        foreach (Transform vector in vectors) {
-            float distance = Vector3.Distance(point, vector.position);
-            float localStrength = vector.localScale.magnitude / 3f;
-            float maxReach = localStrength * maxDistance;
-            if (distance < maxReach) {
-                float weight = (maxReach - distance) / maxReach;
-                direction += vector.forward * localStrength * weight;
-                sumWeights += weight;
-            }
+        foreach (Transform vector in transform) {
+            float distance = Mathf.Pow(Vector3.Distance(point, vector.position), distancePower) * scale;
+            float localStrength = vector.localScale.x;
+            float weight = localStrength / (distance + 1);
+            direction += vector.forward * weight;
         }
 
-        if (sumWeights == 0) return Vector3.zero;
-
-        return direction / sumWeights;
+        return direction;
     }
+    public Vector3 getDirection(Transform transform) { return getDirection(transform.position); }
+    public Vector3 getDirectionNormalized(Transform transform) { return getDirection(transform.position).normalized; }
+    public Vector3 getDirectionNormalized(Vector3 point) { return getDirection(point).normalized; }
 
 
-
-    //Returns 0-1 if all vector's scale.z is 0-1
-    public float getStrength(Transform transform) { return getStrength(transform.position); }
+    
     public float getStrength(Vector3 point) {
-        if (vectors.Count == 0) return 0;
+        if (transform.childCount == 0) return 0;
         float strength = 0;
-        float sumWeights = 0;
 
-        foreach (Transform vector in vectors) {
-            float distance = Vector3.Distance(point, vector.position);
-            float localStrength = vector.localScale.magnitude / 3f;
-            float maxReach = localStrength * maxDistance;
-            if (distance < maxReach) {
-                float weight = (maxReach - distance) / maxReach;
-                strength += localStrength * weight;
-                sumWeights += weight;
-            }
+        foreach (Transform vector in transform) {
+            float distance = Mathf.Pow(Vector3.Distance(point, vector.position), distancePower) * scale;
+            float localStrength = vector.localScale.x;
+            strength += localStrength / (distance + 1);
         }
 
-        if (sumWeights == 0) return 0;
-
-        return strength / sumWeights;
+        return strength;
     }
-
+    public float getStrength(Transform transform) { return getStrength(transform.position); }
+    public float getStrengthNormalized(Transform transform) { return getStrengthNormalized(transform.position); }
+    public float getStrengthNormalized(Vector3 point) { return getStrength(point) / transform.childCount; }
 
     private void OnDrawGizmos() {
-        for (int x = 0; x < gizmoCount.x; x++) {
-            for (int y = 0; y < gizmoCount.y; y++) {
-                for (int z = 0; z < gizmoCount.z; z++) {
-                    Vector3 position = new Vector3(
-                        transform.position.x - ((gizmoCount.x/2) * gizmoScale.x) + (x * gizmoScale.x),
-                        transform.position.y - ((gizmoCount.y / 2) * gizmoScale.y) +(y * gizmoScale.y),
-                        transform.position.z - ((gizmoCount.z / 2) * gizmoScale.z) + (z * gizmoScale.z));
-                    float strength = getStrength(position);
-                    if (strength > 0) {
-                        Vector3 direction = getDirection(position);
-                        ForGizmo(position, direction, gizmoColor.Evaluate(strength), 0.25f, 10);
-                    }
-                }
+        if (showVectors) {
+            foreach (Transform vector in transform) {
+                drawArrow(vector.position, vector.forward, gizmoColor.Evaluate(vector.localScale.x), 0.25f, 20);
             }
         }
+        if (showStrength || showDirection || showMagnitude) { 
 
-        foreach (Transform vector in vectors) {
-            ForGizmo(vector.position, vector.forward, gizmoColor.Evaluate(vector.localScale.magnitude/3f), 0.25f, 20);
+            for (int x = 0; x < gizmoCount.x; x++) {
+                for (int y = 0; y < gizmoCount.y; y++) {
+                    for (int z = 0; z < gizmoCount.z; z++) {
+
+                        Vector3 position = new Vector3(
+                            transform.position.x - ((gizmoCount.x / 2) * gizmoScale.x) + (x * gizmoScale.x),
+                            transform.position.y - ((gizmoCount.y / 2) * gizmoScale.y) + (y * gizmoScale.y),
+                            transform.position.z - ((gizmoCount.z / 2) * gizmoScale.z) + (z * gizmoScale.z));
+
+                        float strength = 0;
+                        if (showStrength) strength = getStrengthNormalized(position);
+
+                        if (showDirection) {
+                            Vector3 direction = Vector3.zero;
+                            if (showMagnitude) direction = getDirection(position);
+                            else direction = getDirectionNormalized(position);
+                            if(direction.magnitude != 0) drawArrow(position, direction, gizmoColor.Evaluate(Mathf.Clamp01(strength)), 0.25f, 10);
+                        } else if(showStrength){
+                            drawX(position, 1, gizmoColor.Evaluate(strength));
+                        }
+                    } 
+                }
+            }
+
         }
     }
 
-    public static void ForGizmo(Vector3 pos, Vector3 direction, Color color, float arrowHeadLength = 0.25f, float arrowHeadAngle = 20.0f) {
+    public void drawArrow(Vector3 pos, Vector3 direction, Color color, float arrowHeadLength = 0.25f, float arrowHeadAngle = 20.0f) {
         Gizmos.color = color;
         Gizmos.DrawRay(pos, direction);
 
@@ -95,6 +108,22 @@ public class VectorField : MonoBehaviour{
         Vector3 left = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 180 - arrowHeadAngle, 0) * new Vector3(0, 0, 1);
         Gizmos.DrawRay(pos + direction, right * arrowHeadLength);
         Gizmos.DrawRay(pos + direction, left * arrowHeadLength);
+    }
+
+    public void drawX(Vector3 pos, float size, Color color) {
+        Gizmos.color = color;
+        if (gizmoCount.y > 1) {
+            Gizmos.DrawRay(pos, Vector3.up * size);
+            Gizmos.DrawRay(pos, Vector3.down * size);
+        }
+        if (gizmoCount.x > 1) {
+            Gizmos.DrawRay(pos, Vector3.left * size);
+            Gizmos.DrawRay(pos, Vector3.right * size);
+        }
+        if (gizmoCount.z > 1) {
+            Gizmos.DrawRay(pos, Vector3.forward * size);
+            Gizmos.DrawRay(pos, Vector3.back * size);
+        }
     }
 
 }
