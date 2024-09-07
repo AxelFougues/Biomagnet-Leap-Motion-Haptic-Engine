@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using static SignalData;
+using VectorField;
 
 public class TouchableField : Touchable{
 
@@ -9,7 +10,7 @@ public class TouchableField : Touchable{
     [Header("References")]
     [Space]
 
-    public VectorField vectorField;
+    public VectorField.VectorField vectorField;
 
     [Space]
     [Header("Material Settings")]
