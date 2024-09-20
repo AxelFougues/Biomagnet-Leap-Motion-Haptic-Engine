@@ -98,7 +98,7 @@ namespace VectorField {
                                 Vector3 direction = Vector3.zero;
                                 if (showMagnitude) direction = getDirection(position);
                                 else direction = getDirectionNormalized(position);
-                                drawArrow(position, direction, gizmoColor.Evaluate(Mathf.Clamp01(strength)), 0.25f, 10);
+                                if(!float.IsNaN(strength)) drawArrow(position, direction, gizmoColor.Evaluate(Mathf.Clamp01(strength)), 0.25f, 10);
                             } else if (showStrength) {
                                 drawX(position, 1, gizmoColor.Evaluate(strength));
                             }
