@@ -161,6 +161,14 @@ public class StimulationOutput : MonoBehaviour {
         
     }
 
+    private void OnDisable() {
+        foreach (KeyValuePair<int, ContactParameters> cp in activeContacts) {
+            cp.Value.touchable.onContactEnd();
+        }
+        activeContacts.Clear();
+        exitCleanup();
+    }
+
     void exitCleanup() {
         signalGenerator.loadPreset(noSignalPreset.data);
         if (outputUI != null) outputUI.text.text = "0%";

@@ -16,7 +16,7 @@ Material:
   - BACKFACE_NORMAL_MODE_MIRROR
   - _WINDQUALITY_BEST
   m_InvalidKeywords: []
-  m_LightmapFlags: 5
+  m_LightmapFlags: 0
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -86,7 +86,7 @@ Material:
     m_Floats:
     - BACKFACE_NORMAL_MODE: 1
     - EFFECT_BILLBOARD: 0
-    - EFFECT_EXTRA_TEX: 1
+    - EFFECT_EXTRA_TEX: 0
     - _AlphaClipThreshold: 0.33
     - _BumpScale: 1
     - _Cutoff: 0.5
@@ -108,7 +108,7 @@ Material:
     - _SubsurfaceKwToggle: 0
     - _UVSec: 0
     - _WINDQUALITY: 4
-    - _WindQuality: 1
+    - _WindQuality: 0
     - _ZWrite: 1
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}

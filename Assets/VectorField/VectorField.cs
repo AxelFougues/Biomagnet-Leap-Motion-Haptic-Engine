@@ -6,28 +6,26 @@ namespace VectorField {
 
     public class VectorField : MonoBehaviour {
         [Header("Strength field")]
-        [Range(0, 1)]
         public float strengthDistanceMultiplier = 1;
-        [Range(0, 100)]
         public float strengthDistancePower = 1;
         [Space]
         [Header("Vector field")]
-        [Range(0, 5)]
-        public float magnitudeDistanceMultiplier = 1;
-        [Range(0, 10)]
-        public float magnitudeDistancePower = 1;
+        public float vectorDistanceMultiplier = 1;
+        public float vectorDistancePower = 1;
         [Space]
         [Header("Gizmos")]
         [Space]
+        public bool showChildren = true;
         public bool showStrength = true;
-        [Space]
-        public bool showVectors = true;
-        public bool showDirection = true;
         public bool showMagnitude = true;
+        public bool showDirection = true;
+        
+
         [Space]
         public Vector3 gizmoScale = Vector3.one;
         public Vector3Int gizmoCount = Vector3Int.one * 10;
         public Gradient gizmoColor = new Gradient();
+        public Vector3 gizmoOffset = Vector3.zero;
 
         //Get the angle between a Transform and the local field
         public float sampleAlignement(Vector3 position, Quaternion rotation) {
@@ -43,15 +41,23 @@ namespace VectorField {
         public Vector3 getDirection(Vector3 point) {
             if (transform.childCount == 0) return Vector3.zero;
             Vector3 direction = Vector3.zero;
-
+            float weightSum = 0;
             foreach (Transform vector in transform) {
-                float distance = Mathf.Pow(Vector3.Distance(point, vector.position) * magnitudeDistanceMultiplier, magnitudeDistancePower);
+                float distance = Vector3.Distance(point, vector.position) * vectorDistanceMultiplier;
+                distance = Mathf.Pow(distance, vectorDistancePower);
                 float localStrength = vector.localScale.z;
                 float weight = localStrength / (distance + 1);
-                direction += vector.forward * weight;
+                if (vector.name == "Arrow") {
+                    direction += vector.forward * weight;
+                } else if (vector.name == "BlackHole") {
+                    direction += (vector.position - point).normalized * weight;
+                } else if (vector.name == "WhiteHole") {
+                    direction += (point - vector.position).normalized * weight;
+                }
+                weightSum += weight;
             }
 
-            return direction;
+            return direction / weightSum;
         }
         public Vector3 getDirection(Transform transform) { return getDirection(transform.position); }
         public Vector3 getDirectionNormalized(Transform transform) { return getDirection(transform.position).normalized; }
@@ -63,9 +69,10 @@ namespace VectorField {
             float strength = 0;
 
             foreach (Transform vector in transform) {
-                float distance = Mathf.Pow(Vector3.Distance(point, vector.position) * strengthDistanceMultiplier, strengthDistancePower);
-                float localStrength = vector.localScale.z;
-                strength += localStrength / (distance + 1);
+                float distance = strengthDistanceMultiplier * Vector3.Distance(point, vector.position);
+                distance = Mathf.Pow(distance, strengthDistancePower);
+                float localStrength = vector.localScale.z / distance;
+                strength += localStrength; // (distance + 1);
             }
 
             return strength;
@@ -75,12 +82,14 @@ namespace VectorField {
         public float getStrengthNormalized(Vector3 point) { return getStrength(point) / transform.childCount; }
 
         private void OnDrawGizmos() {
-            if (showVectors) {
+            if (showChildren) {
                 foreach (Transform vector in transform) {
-                    drawArrow(vector.position, vector.forward, gizmoColor.Evaluate(vector.localScale.z), 0.25f, 20);
+                    if(vector.name == "Arrow") drawArrow(vector.position, vector.forward, gizmoColor.Evaluate(vector.localScale.z), 0.25f, 20);
+                    else if(vector.name == "BlackHole") drawX(vector.position, 0.2f, gizmoColor.Evaluate(1));
+                    else if (vector.name == "WhiteHole") drawX(vector.position, 0.2f, gizmoColor.Evaluate(0));
                 }
             }
-            if (showStrength || showDirection || showMagnitude) {
+            if (showStrength || showDirection) {
 
                 for (int x = 0; x < gizmoCount.x; x++) {
                     for (int y = 0; y < gizmoCount.y; y++) {
@@ -89,7 +98,7 @@ namespace VectorField {
                             Vector3 position = new Vector3(
                                 transform.position.x - ((gizmoCount.x / 2) * gizmoScale.x) + (x * gizmoScale.x),
                                 transform.position.y - ((gizmoCount.y / 2) * gizmoScale.y) + (y * gizmoScale.y),
-                                transform.position.z - ((gizmoCount.z / 2) * gizmoScale.z) + (z * gizmoScale.z));
+                                transform.position.z - ((gizmoCount.z / 2) * gizmoScale.z) + (z * gizmoScale.z)) + gizmoOffset;
 
                             float strength = 0;
                             if (showStrength) strength = getStrengthNormalized(position);
