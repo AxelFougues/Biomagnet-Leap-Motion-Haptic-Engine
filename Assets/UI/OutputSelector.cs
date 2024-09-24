@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,20 +13,13 @@ public class OutputSelector : MonoBehaviour{
     public Toggle toggleLeft;
     public Toggle toggleRight;
 
-    StimulationOutput stimulationOutput;
+    public StimulationOutput stimulationOutput;
 
     private void Start() {
-        GameObject go = GameObject.Find(matchingID);
-        if (go != null) {
-            stimulationOutput = go.GetComponent<StimulationOutput>();
-            idText.text = matchingID;
-            stimulationOutput.gameObject.SetActive(toggleLeft.isOn || toggleRight.isOn);
-            if (toggleLeft.isOn) stimulationOutput.setStereoPan(-1);
-            if (toggleRight.isOn) stimulationOutput.setStereoPan(1);
-        } else {
-            Destroy(gameObject);
-        }
-
+        idText.text = matchingID;
+        stimulationOutput.gameObject.SetActive(toggleLeft.isOn || toggleRight.isOn);
+        if (toggleLeft.isOn) stimulationOutput.setStereoPan(-1);
+        if (toggleRight.isOn) stimulationOutput.setStereoPan(1);
     }
 
     void onToggleLeft(bool value) {

@@ -44,7 +44,7 @@ public class StimulationOutput : MonoBehaviour {
     }
 
     public void setStereoPan(int pan) {
-        audioSource.panStereo = pan;
+        signalGenerator.stereoPan = pan;
     }
 
     //Contact
