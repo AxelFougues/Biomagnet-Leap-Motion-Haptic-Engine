@@ -5,6 +5,8 @@ using UnityEngine;
 namespace VectorField {
 
     public class VectorField : MonoBehaviour {
+        public List<Collider> colliders = new List<Collider>();
+        [Space]
         [Header("Strength field")]
         public float strengthDistanceMultiplier = 1;
         public float strengthDistancePower = 1;
@@ -56,6 +58,18 @@ namespace VectorField {
                 }
                 weightSum += weight;
             }
+            foreach (Collider collider in colliders) {
+                Vector3 closestPoint = collider.ClosestPoint(point);
+                float distance = Vector3.Distance(point, closestPoint) * vectorDistanceMultiplier;
+                distance = Mathf.Pow(distance, vectorDistancePower);
+                float localStrength = collider.transform.localScale.z;
+                float weight = localStrength / (distance + 1);
+                if (collider.transform.name == "BlackHole") {
+                    direction += (closestPoint - point).normalized * weight;
+                } else if (collider.transform.name == "WhiteHole") {
+                    direction += (point - closestPoint).normalized * weight;
+                }
+            }
 
             return direction / weightSum;
         }
@@ -72,7 +86,22 @@ namespace VectorField {
                 float distance = strengthDistanceMultiplier * Vector3.Distance(point, vector.position);
                 distance = Mathf.Pow(distance, strengthDistancePower);
                 float localStrength = vector.localScale.z / distance;
-                strength += localStrength; // (distance + 1);
+                if (vector.name == "BlackHole") {
+                    strength += localStrength;
+                } else if (vector.name == "WhiteHole") {
+                    strength -= localStrength;
+                }
+            }
+            foreach (Collider collider in colliders) {
+                Vector3 closestPoint = collider.ClosestPoint(point);
+                float distance = strengthDistanceMultiplier * Vector3.Distance(point, closestPoint);
+                distance = Mathf.Pow(distance, strengthDistancePower);
+                float localStrength = collider.transform.localScale.z / distance;
+                if (collider.transform.name == "BlackHole") {
+                    strength += localStrength;
+                } else if (collider.transform.name == "WhiteHole") {
+                    strength -= localStrength;
+                }
             }
 
             return strength;
@@ -85,8 +114,8 @@ namespace VectorField {
             if (showChildren) {
                 foreach (Transform vector in transform) {
                     if(vector.name == "Arrow") drawArrow(vector.position, vector.forward, gizmoColor.Evaluate(vector.localScale.z), 0.25f, 20);
-                    else if(vector.name == "BlackHole") drawX(vector.position, 0.2f, gizmoColor.Evaluate(1));
-                    else if (vector.name == "WhiteHole") drawX(vector.position, 0.2f, gizmoColor.Evaluate(0));
+                    else if(vector.name == "BlackHole") drawX(vector.position, 0.2f * Vector3.one, gizmoColor.Evaluate(1));
+                    else if (vector.name == "WhiteHole") drawX(vector.position, 0.2f * Vector3.one, gizmoColor.Evaluate(0));
                 }
             }
             if (showStrength || showDirection) {
@@ -109,7 +138,7 @@ namespace VectorField {
                                 else direction = getDirectionNormalized(position);
                                 if(!float.IsNaN(strength)) drawArrow(position, direction, gizmoColor.Evaluate(Mathf.Clamp01(strength)), 0.25f, 10);
                             } else if (showStrength) {
-                                drawX(position, 1, gizmoColor.Evaluate(strength));
+                                if (!float.IsNaN(strength)) drawX(position, gizmoScale, gizmoColor.Evaluate(strength));
                             }
                         }
                     }
@@ -128,20 +157,20 @@ namespace VectorField {
             Gizmos.DrawRay(pos + direction, left * arrowHeadLength);
         }
 
-        public void drawX(Vector3 pos, float size, Color color) {
-            if (size <= float.Epsilon) return;
+        public void drawX(Vector3 pos, Vector3 size, Color color) {
+            if (size.magnitude <= 0) return;
             Gizmos.color = color;
             if (gizmoCount.y > 1) {
-                Gizmos.DrawRay(pos, Vector3.up * size);
-                Gizmos.DrawRay(pos, Vector3.down * size);
+                Gizmos.DrawRay(pos, Vector3.up * size.y);
+                Gizmos.DrawRay(pos, Vector3.down * size.y);
             }
             if (gizmoCount.x > 1) {
-                Gizmos.DrawRay(pos, Vector3.left * size);
-                Gizmos.DrawRay(pos, Vector3.right * size);
+                Gizmos.DrawRay(pos, Vector3.left * size.x);
+                Gizmos.DrawRay(pos, Vector3.right * size.x);
             }
             if (gizmoCount.z > 1) {
-                Gizmos.DrawRay(pos, Vector3.forward * size);
-                Gizmos.DrawRay(pos, Vector3.back * size);
+                Gizmos.DrawRay(pos, Vector3.forward * size.z);
+                Gizmos.DrawRay(pos, Vector3.back * size.z);
             }
         }
 
