@@ -5,7 +5,7 @@ using UnityEngine;
 namespace VectorField {
 
     public class VectorField : MonoBehaviour {
-        public List<Collider> colliders = new List<Collider>();
+        List<Collider> colliders = new List<Collider>();
         [Space]
         [Header("Strength field")]
         public float strengthDistanceMultiplier = 1;
@@ -41,7 +41,7 @@ namespace VectorField {
 
         //Get the direction (and magnitude) of the field at a point
         public Vector3 getDirection(Vector3 point) {
-            if (transform.childCount == 0) return Vector3.zero;
+            if (transform.childCount == 0 && colliders.Count == 0) return Vector3.zero;
             Vector3 direction = Vector3.zero;
             float weightSum = 0;
             foreach (Transform vector in transform) {
@@ -64,11 +64,7 @@ namespace VectorField {
                 distance = Mathf.Pow(distance, vectorDistancePower);
                 float localStrength = collider.transform.localScale.z;
                 float weight = localStrength / (distance + 1);
-                if (collider.transform.name == "BlackHole") {
-                    direction += (closestPoint - point).normalized * weight;
-                } else if (collider.transform.name == "WhiteHole") {
-                    direction += (point - closestPoint).normalized * weight;
-                }
+                direction += (closestPoint - point).normalized * weight;
             }
 
             return direction / weightSum;
@@ -79,7 +75,7 @@ namespace VectorField {
 
         //Get the strength of a field at a point
         public float getStrength(Vector3 point) {
-            if (transform.childCount == 0) return 0;
+            if (transform.childCount == 0 && colliders.Count == 0) return 0;
             float strength = 0;
 
             foreach (Transform vector in transform) {
@@ -97,11 +93,7 @@ namespace VectorField {
                 float distance = strengthDistanceMultiplier * Vector3.Distance(point, closestPoint);
                 distance = Mathf.Pow(distance, strengthDistancePower);
                 float localStrength = collider.transform.localScale.z / distance;
-                if (collider.transform.name == "BlackHole") {
-                    strength += localStrength;
-                } else if (collider.transform.name == "WhiteHole") {
-                    strength -= localStrength;
-                }
+                strength += localStrength;
             }
 
             return strength;
@@ -116,6 +108,9 @@ namespace VectorField {
                     if(vector.name == "Arrow") drawArrow(vector.position, vector.forward, gizmoColor.Evaluate(vector.localScale.z), 0.25f, 20);
                     else if(vector.name == "BlackHole") drawX(vector.position, 0.2f * Vector3.one, gizmoColor.Evaluate(1));
                     else if (vector.name == "WhiteHole") drawX(vector.position, 0.2f * Vector3.one, gizmoColor.Evaluate(0));
+                }
+                foreach (Collider collider in colliders) {
+                    if (collider.transform.name == "BlackHole") drawX(collider.transform.position, 0.2f * Vector3.one, gizmoColor.Evaluate(1));
                 }
             }
             if (showStrength || showDirection) {
@@ -136,7 +131,7 @@ namespace VectorField {
                                 Vector3 direction = Vector3.zero;
                                 if (showMagnitude) direction = getDirection(position);
                                 else direction = getDirectionNormalized(position);
-                                if(!float.IsNaN(strength)) drawArrow(position, direction, gizmoColor.Evaluate(Mathf.Clamp01(strength)), 0.25f, 10);
+                                if(!float.IsNaN(strength)) drawArrow(position, direction, gizmoColor.Evaluate(Mathf.Clamp01(strength)), 0.25f, 10, gizmoScale.x);
                             } else if (showStrength) {
                                 if (!float.IsNaN(strength)) drawX(position, gizmoScale, gizmoColor.Evaluate(strength));
                             }
@@ -147,14 +142,14 @@ namespace VectorField {
             }
         }
 
-        public void drawArrow(Vector3 pos, Vector3 direction, Color color, float arrowHeadLength = 0.25f, float arrowHeadAngle = 20.0f) {
+        public void drawArrow(Vector3 pos, Vector3 direction, Color color, float arrowHeadLength = 0.25f, float arrowHeadAngle = 20.0f, float scale = 1) {
             if (direction.sqrMagnitude <= 0.1f) return;
             Gizmos.color = color;
-            Gizmos.DrawRay(pos, direction);
-            Vector3 right = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 180 + arrowHeadAngle, 0) * new Vector3(0, 0, 1);
-            Vector3 left = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 180 - arrowHeadAngle, 0) * new Vector3(0, 0, 1);
-            Gizmos.DrawRay(pos + direction, right * arrowHeadLength);
-            Gizmos.DrawRay(pos + direction, left * arrowHeadLength);
+            Gizmos.DrawRay(pos, direction * scale);
+            Vector3 right = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 180 + arrowHeadAngle, 0) * new Vector3(0, 0, 1) * scale;
+            Vector3 left = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 180 - arrowHeadAngle, 0) * new Vector3(0, 0, 1) * scale;
+            Gizmos.DrawRay(pos + direction * scale, right * arrowHeadLength);
+            Gizmos.DrawRay(pos + direction * scale, left * arrowHeadLength);
         }
 
         public void drawX(Vector3 pos, Vector3 size, Color color) {
