@@ -49,7 +49,7 @@ public class TouchableField : Touchable{
         if (renderStrength) {
 
             float strengthEffectNormalizedValue = 0;
-            strengthEffectNormalizedValue = strengthResponse.Evaluate(vectorField.getStrengthNormalized(cp.currentPosition));
+            strengthEffectNormalizedValue = strengthResponse.Evaluate(vectorField.getStrength(cp.currentPosition));
             si.set(strengthEffect, mapValue(strengthEffectNormalizedValue, 0, 1, minPressureEffectValue, maxPressureEffectValue));
 
         }

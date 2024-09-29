@@ -5,7 +5,7 @@ using UnityEngine;
 namespace VectorField {
 
     public class VectorField : MonoBehaviour {
-        List<Collider> colliders = new List<Collider>();
+        public List<Collider> colliders = new List<Collider>();
         [Space]
         [Header("Strength field")]
         public float strengthDistanceMultiplier = 1;
