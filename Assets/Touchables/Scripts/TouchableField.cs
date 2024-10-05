@@ -59,7 +59,6 @@ public class TouchableField : Touchable{
 
             float directionEffectNormalizedValue = 0;
             directionEffectNormalizedValue = directionResponse.Evaluate(vectorField.sampleAlignementNormalized(cp.stimulationOutput.transform));
-            Debug.Log(directionEffectNormalizedValue);
             si.set(directionEffect, mapValue(directionEffectNormalizedValue, 0, 1, minPressureEffectValue, maxPressureEffectValue));
 
         }
