@@ -86,7 +86,6 @@ public class StimulationOutput : MonoBehaviour {
                 velocity = (cp.currentPosition - cp.previousPosition) / Time.fixedDeltaTime; //in mm/s
                 cp.penetrationVelocity = Vector3.Dot(velocity, cp.penetrationDirection); //in mm/s
                 cp.perpendicularVelocity = cp.velocityFilter.getValue((velocity.magnitude - (cp.penetrationVelocity * cp.penetrationDirection).magnitude)); // in mm/s
-
             }
 
             SignalData sd = cp.touchable.onContact(cp);

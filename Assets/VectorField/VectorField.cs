@@ -82,12 +82,14 @@ namespace VectorField {
                 float distance = strengthDistanceMultiplier * Vector3.Distance(point, vector.position);
                 distance = Mathf.Pow(distance, strengthDistancePower);
                 float localStrength = vector.localScale.z / distance;
+
                 if (vector.name == "BlackHole") {
                     strength += localStrength;
                 } else if (vector.name == "WhiteHole") {
                     strength -= localStrength;
                 }
             }
+
             foreach (Collider collider in colliders) {
                 Vector3 closestPoint = collider.ClosestPoint(point);
                 float distance = strengthDistanceMultiplier * Vector3.Distance(point, closestPoint);
@@ -101,6 +103,9 @@ namespace VectorField {
         public float getStrength(Transform transform) { return getStrength(transform.position); }
         public float getStrengthNormalized(Transform transform) { return getStrengthNormalized(transform.position); }
         public float getStrengthNormalized(Vector3 point) { return getStrength(point) / transform.childCount; }
+
+
+
 
         private void OnDrawGizmos() {
             if (showChildren) {

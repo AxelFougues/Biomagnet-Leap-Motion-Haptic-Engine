@@ -45,24 +45,25 @@ public class TouchableField : Touchable{
         SignalData si = new SignalData();
 
         foreach (SignalParameterConstant spc in constantParameters) si.set(spc.signalParameter, spc.value);
+        
 
         if (renderStrength) {
 
             float strengthEffectNormalizedValue = 0;
-            strengthEffectNormalizedValue = strengthResponse.Evaluate(vectorField.getStrength(cp.currentPosition));
+            strengthEffectNormalizedValue = strengthResponse.Evaluate(vectorField.getStrength(cp.stimulationOutput.transform));
             si.set(strengthEffect, mapValue(strengthEffectNormalizedValue, 0, 1, minPressureEffectValue, maxPressureEffectValue));
-
+            
         }
 
         if (renderDirection) {
 
             float directionEffectNormalizedValue = 0;
             directionEffectNormalizedValue = directionResponse.Evaluate(vectorField.sampleAlignementNormalized(cp.stimulationOutput.transform));
+            Debug.Log(directionEffectNormalizedValue);
             si.set(directionEffect, mapValue(directionEffectNormalizedValue, 0, 1, minPressureEffectValue, maxPressureEffectValue));
 
         }
 
         return si;
     }
-
 }
