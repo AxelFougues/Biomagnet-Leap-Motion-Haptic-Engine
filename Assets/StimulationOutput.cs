@@ -8,6 +8,7 @@ public class StimulationOutput : MonoBehaviour {
 
     const int COLLISION_SMOOTHING_BUFFER = 3;
 
+
     [Header("Output")]
     [Space]
 

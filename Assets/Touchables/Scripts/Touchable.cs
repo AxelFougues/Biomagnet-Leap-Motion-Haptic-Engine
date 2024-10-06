@@ -21,7 +21,7 @@ public class Touchable : MonoBehaviour{
 
     public bool renderPressure = true;
     [Tooltip("Depth of max pressure, in mm")]
-    [Range(0f, 20f)]
+    [Range(0f, 50f)]
     public float pressureMaxDepth = 10f;
     [Tooltip("Normalized intensity of pressure feedback over normalized penetration depth")]
     public AnimationCurve pressureResponse;

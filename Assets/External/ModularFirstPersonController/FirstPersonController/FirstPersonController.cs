@@ -57,6 +57,7 @@ public class FirstPersonController : MonoBehaviour{
     public bool playerCanMove = true;
     public float walkSpeed = 5f;
     public float maxVelocityChange = 10f;
+    public bool mouseNavigation = false;
 
     // Internal Variables
     private bool isWalking = false;
@@ -371,7 +372,10 @@ public class FirstPersonController : MonoBehaviour{
         {
             // Calculate how fast we should be moving
             Vector3 targetVelocity = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-
+            if (mouseNavigation) {
+                if (Input.GetMouseButton(0)) targetVelocity.z = 1;
+                else if (Input.GetMouseButton(1)) targetVelocity.z = -1;
+            }
             
 
             if (keyboardTurning){
@@ -535,6 +539,10 @@ public class FirstPersonController : MonoBehaviour{
 
     public void setkeyboardTurning(bool value) {
         keyboardTurning = value;
+    }
+
+    public void setMouseNavigation(bool value) {
+        mouseNavigation = value;
     }
 }
 
