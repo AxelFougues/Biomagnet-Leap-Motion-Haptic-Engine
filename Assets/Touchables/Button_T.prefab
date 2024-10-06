@@ -405,6 +405,7 @@ MonoBehaviour:
     type: 3}
   triggerDepth: 19
   unTriggerDepth: 15
+  freeUnTriggerDepth: 13
   OnTriggered:
     m_PersistentCalls:
       m_Calls:

@@ -15,6 +15,7 @@ public class TouchableButton : TouchableMovable{
     [Space]
     public float triggerDepth;
     public float unTriggerDepth;
+    public float freeUnTriggerDepth;
 
     [Space]
     [Header("Events")]
@@ -49,7 +50,10 @@ public class TouchableButton : TouchableMovable{
 
     protected override void onNoContact() {
         base.onNoContact();
-        if (isTriggered && inPlace) doTrigger(false);
+        if (isTriggered) {
+            float depth = Vector3.Distance(movableObject.position, initialPosition) * 1000;
+            if (depth <= freeUnTriggerDepth) doTrigger(false);
+        }
     }
 
     public void doTrigger(bool state) {
