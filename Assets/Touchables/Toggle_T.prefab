@@ -382,7 +382,7 @@ GameObject:
   - component: {fileID: 677451791343860364}
   - component: {fileID: 6304205626597731835}
   - component: {fileID: 8930374100457721542}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Actuator
   m_TagString: Untagged
   m_Icon: {fileID: 0}

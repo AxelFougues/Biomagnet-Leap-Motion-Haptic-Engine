@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 1619758893717681852}
   - component: {fileID: 4067773318443571609}
   - component: {fileID: 4201206641127872845}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Pyramid_T
   m_TagString: Spawnable
   m_Icon: {fileID: 0}

@@ -12,6 +12,11 @@ public class TouchableTrigger : Touchable{
     public UnityEvent OnTriggered;
     public UnityEvent OnUnTriggered;
 
+    [Space]
+    [Header("Audio Feedback")]
+    [Space]
+
+    public AudioClip triggerFeedback;
 
     [Space]
     [Header("Debug")]
@@ -21,20 +26,24 @@ public class TouchableTrigger : Touchable{
 
     private void Start() {
 #if UNITY_EDITOR
-        if (autoTriggerInEditor) onContactStart();
+        if (autoTriggerInEditor) onContactStart(null);
 #endif
     }
 
-    public override void onContactStart() {
-        base.onContactStart();
+    public override void onContactStart(StimulationOutput stimulationOutput) {
+        base.onContactStart(stimulationOutput);
         if (!isTriggered) {
             isTriggered = true;
             OnTriggered?.Invoke();
+            if (triggerFeedback != null && stimulationOutput != null) {
+                stimulationOutput.audioSource.PlayOneShot(triggerFeedback);
+            }
         }
     }
 
-    public override void onContactEnd() {
-        base.onContactEnd();
+    public override void onContactEnd(StimulationOutput stimulationOutput) {
+        base.onContactEnd(stimulationOutput);
+        if (triggerFeedback != null && stimulationOutput != null && stimulationOutput.audioSource.isPlaying) stimulationOutput.audioSource.Pause();
         if (isTriggered && inContact > 0) {
             isTriggered = false;
             OnUnTriggered?.Invoke();

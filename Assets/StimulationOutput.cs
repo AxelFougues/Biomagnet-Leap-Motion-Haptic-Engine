@@ -66,7 +66,7 @@ public class StimulationOutput : MonoBehaviour {
             ContactParameters cp = new ContactParameters(surface.transform.position, t, this);
             cp.collidesDuringFrame = true;
             activeContacts.Add(id, cp);
-            t.onContactStart();
+            t.onContactStart(this);
             triggerFilters.Add(id, new RollingAverageFilter(COLLISION_SMOOTHING_BUFFER));
         }
         
@@ -122,7 +122,7 @@ public class StimulationOutput : MonoBehaviour {
         }
 
         foreach (int id in lost) {
-            activeContacts[id].touchable.onContactEnd();
+            activeContacts[id].touchable.onContactEnd(this);
             activeContacts.Remove(id);
             triggerFilters.Remove(id);
         }
@@ -144,7 +144,7 @@ public class StimulationOutput : MonoBehaviour {
 
     private void OnDisable() {
         foreach (KeyValuePair<int, ContactParameters> cp in activeContacts) {
-            cp.Value.touchable.onContactEnd();
+            cp.Value.touchable.onContactEnd(this);
         }
         activeContacts.Clear();
         exitCleanup();

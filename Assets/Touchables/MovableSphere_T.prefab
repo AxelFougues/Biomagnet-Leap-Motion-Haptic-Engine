@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5880825525694113714}
   - component: {fileID: 2670975804368819864}
   - component: {fileID: 82791512905851984}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: MovableSphere_T
   m_TagString: Spawnable
   m_Icon: {fileID: 0}

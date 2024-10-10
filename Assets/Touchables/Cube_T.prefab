@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7750319766767717652}
   - component: {fileID: 1039406785612653198}
   - component: {fileID: 8598732665539735134}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube_T
   m_TagString: Spawnable
   m_Icon: {fileID: 0}

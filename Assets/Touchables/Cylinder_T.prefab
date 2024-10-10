@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7006231867553551365}
   - component: {fileID: 8324204608647197411}
   - component: {fileID: 5224451650118935345}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cylinder_T
   m_TagString: Spawnable
   m_Icon: {fileID: 0}
