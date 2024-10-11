@@ -43,7 +43,9 @@ public class TouchableTrigger : Touchable{
 
     public override void onContactEnd(StimulationOutput stimulationOutput) {
         base.onContactEnd(stimulationOutput);
-        if (triggerFeedback != null && stimulationOutput != null && stimulationOutput.audioSource.isPlaying) stimulationOutput.audioSource.Pause();
+        if (triggerFeedback != null && stimulationOutput != null) {
+            
+        }
         if (isTriggered && inContact > 0) {
             isTriggered = false;
             OnUnTriggered?.Invoke();

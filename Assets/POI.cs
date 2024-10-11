@@ -82,8 +82,10 @@ public class POI : MonoBehaviour{
         LeanTween.move(PlayerRefs.instance.playerCamera.gameObject, cameraAnchor, 1f).setEase(LeanTweenType.easeInOutCubic);
         LeanTween.rotate(PlayerRefs.instance.playerCamera.gameObject, cameraAnchor.eulerAngles, 1f).setEase(LeanTweenType.easeInOutCubic);
         if (useHandTracking) {
-            LeanTween.move(PlayerRefs.instance.handTracking, handTrackingAnchor, 1f).setEase(LeanTweenType.easeInOutCubic);
-            LeanTween.rotate(PlayerRefs.instance.handTracking.gameObject, handTrackingAnchor.eulerAngles, 1f).setEase(LeanTweenType.easeInOutCubic);
+            PlayerRefs.instance.handTracking.transform.position = handTrackingAnchor.position;
+            PlayerRefs.instance.handTracking.transform.rotation = handTrackingAnchor.rotation;
+            //LeanTween.move(PlayerRefs.instance.handTracking, handTrackingAnchor, 1f).setEase(LeanTweenType.easeInOutCubic);
+            //LeanTween.rotate(PlayerRefs.instance.handTracking.gameObject, handTrackingAnchor.eulerAngles, 1f).setEase(LeanTweenType.easeInOutCubic);
         } else PlayerRefs.instance.handTracking.SetActive(false);
     }
 
@@ -95,8 +97,10 @@ public class POI : MonoBehaviour{
         LeanTween.move(PlayerRefs.instance.playerCamera.gameObject, PlayerRefs.instance.joint, 0.5f).setEase(LeanTweenType.easeInOutCubic);
         LeanTween.rotate(PlayerRefs.instance.playerCamera.gameObject, PlayerRefs.instance.joint.eulerAngles, 0.5f).setEase(LeanTweenType.easeInOutCubic);
         if (useHandTracking) {
-            LeanTween.move(PlayerRefs.instance.handTracking.gameObject, PlayerRefs.instance.handTrackingJoint, 0.5f).setEase(LeanTweenType.easeInOutCubic);
-            LeanTween.rotate(PlayerRefs.instance.handTracking.gameObject, PlayerRefs.instance.handTrackingJoint.eulerAngles, 0.5f).setEase(LeanTweenType.easeInOutCubic);
+            PlayerRefs.instance.handTracking.transform.position = PlayerRefs.instance.handTrackingJoint.position;
+            PlayerRefs.instance.handTracking.transform.rotation = PlayerRefs.instance.handTrackingJoint.rotation;
+            //LeanTween.move(PlayerRefs.instance.handTracking.gameObject, PlayerRefs.instance.handTrackingJoint, 0.5f).setEase(LeanTweenType.easeInOutCubic);
+            //LeanTween.rotate(PlayerRefs.instance.handTracking.gameObject, PlayerRefs.instance.handTrackingJoint.eulerAngles, 0.5f).setEase(LeanTweenType.easeInOutCubic);
         } else PlayerRefs.instance.handTracking.SetActive(true);
 
     }

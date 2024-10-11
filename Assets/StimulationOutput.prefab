@@ -134,7 +134,7 @@ MonoBehaviour:
   outputChannelID: 0
   simulateMotion: 1
   minPerpendicularVelocity: 10
-  doEqualization: 1
+  doEqualization: 0
   equalization:
     serializedVersion: 2
     m_Curve:
@@ -149,7 +149,7 @@ MonoBehaviour:
       outWeight: 0.46241054
     - serializedVersion: 3
       time: 200
-      value: 1
+      value: 0.5
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -158,7 +158,7 @@ MonoBehaviour:
       outWeight: 0.33333334
     - serializedVersion: 3
       time: 500
-      value: 1
+      value: 0.5
       inSlope: 0
       outSlope: 0
       tangentMode: 34
