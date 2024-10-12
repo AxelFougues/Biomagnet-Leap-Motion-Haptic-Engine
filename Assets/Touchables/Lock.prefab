@@ -9914,7 +9914,7 @@ MonoBehaviour:
   triggerRotationFeedback: {fileID: 8300000, guid: 97c3f2db45cd2954c93cf18d89c8a22a,
     type: 3}
   releaseFeedback: {fileID: 0}
-  triggerAngle: 90
+  triggerAngle: 87
   unTriggerAngle: 85
   freeUnTriggerAngle: 80
   OnTriggered:
