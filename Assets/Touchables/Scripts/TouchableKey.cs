@@ -38,12 +38,14 @@ public class TouchableKey : TouchableRotatable{
         //Pressing
         if (!isTriggered && degrees >= triggerAngle) {
             doTrigger(true);
-            cp.stimulationOutput.audioSource.PlayOneShot(triggerRotationFeedback);
+            if(EqualizationReference.instance.doEqualization) cp.stimulationOutput.audioClipSource.volume = EqualizationReference.instance.audioClipEqualization;
+            cp.stimulationOutput.audioClipSource.PlayOneShot(triggerRotationFeedback);
         }
         //Releasing
         else if (isTriggered && degrees <= unTriggerAngle) {
             doTrigger(false);
-            cp.stimulationOutput.audioSource.PlayOneShot(releaseFeedback);
+            if (EqualizationReference.instance.doEqualization) cp.stimulationOutput.audioClipSource.volume = EqualizationReference.instance.audioClipEqualization;
+            cp.stimulationOutput.audioClipSource.PlayOneShot(releaseFeedback);
         }
 
         return base.onContact(cp);

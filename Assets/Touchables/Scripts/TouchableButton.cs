@@ -37,12 +37,14 @@ public class TouchableButton : TouchableMovable{
         //Pressing
         if (!isTriggered && depth >= triggerDepth) {
             doTrigger(true);
-            cp.stimulationOutput.audioSource.PlayOneShot(triggerPressFeedback);
+            if (EqualizationReference.instance.doEqualization) cp.stimulationOutput.audioClipSource.volume = EqualizationReference.instance.audioClipEqualization;
+            cp.stimulationOutput.audioClipSource.PlayOneShot(triggerPressFeedback);
         }
         //Releasing
         else if (isTriggered && depth <= unTriggerDepth) {
             doTrigger(false);
-            cp.stimulationOutput.audioSource.PlayOneShot(unTriggerReleaseFeedback);
+            if (EqualizationReference.instance.doEqualization) cp.stimulationOutput.audioClipSource.volume = EqualizationReference.instance.audioClipEqualization;
+            cp.stimulationOutput.audioClipSource.PlayOneShot(unTriggerReleaseFeedback);
         }
 
         return base.onContact(cp);

@@ -37,19 +37,23 @@ public class TouchableToggle : TouchableMovable {
         //Pressing
         if (!isTriggered && !hasLatched && depth >= triggerDepth) {
             trigger(true);
-            cp.stimulationOutput.audioSource.PlayOneShot(triggerPressFeedback);
+            if (EqualizationReference.instance.doEqualization) cp.stimulationOutput.audioClipSource.volume = EqualizationReference.instance.audioClipEqualization;
+            cp.stimulationOutput.audioClipSource.PlayOneShot(triggerPressFeedback);
         }
         if (isTriggered && hasLatched && depth >= triggerDepth) {
             trigger(false);
-            cp.stimulationOutput.audioSource.PlayOneShot(unTriggerPressFeedback);
+            if (EqualizationReference.instance.doEqualization) cp.stimulationOutput.audioClipSource.volume = EqualizationReference.instance.audioClipEqualization;
+            cp.stimulationOutput.audioClipSource.PlayOneShot(unTriggerPressFeedback);
         }
         //Releasing
         if (isTriggered && !hasLatched && depth <= latchDepth) {
-            cp.stimulationOutput.audioSource.PlayOneShot(triggerReleaseFeedback);
+            if (EqualizationReference.instance.doEqualization) cp.stimulationOutput.audioClipSource.volume = EqualizationReference.instance.audioClipEqualization;
+            cp.stimulationOutput.audioClipSource.PlayOneShot(triggerReleaseFeedback);
             hasLatched = true;
         }
         if (!isTriggered && hasLatched && depth <= latchDepth) {
-            cp.stimulationOutput.audioSource.PlayOneShot(unTriggerReleaseFeedback);
+            if (EqualizationReference.instance.doEqualization) cp.stimulationOutput.audioClipSource.volume = EqualizationReference.instance.audioClipEqualization;
+            cp.stimulationOutput.audioClipSource.PlayOneShot(unTriggerReleaseFeedback);
             hasLatched = false;
         }
 

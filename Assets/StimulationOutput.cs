@@ -22,11 +22,6 @@ public class StimulationOutput : MonoBehaviour {
     [Tooltip("Velocity in mm/s")]
     public float minPerpendicularVelocity = 1f;
 
-    [Space]
-    [Header("Equalization")]
-    [Space]
-    public bool doEqualization = true;
-    public AnimationCurve equalization;
 
     [Space]
     [Header("References")]
@@ -34,6 +29,7 @@ public class StimulationOutput : MonoBehaviour {
     public SignalPreset noSignalPreset;
     public SignalGenerator signalGenerator;
     public AudioSource audioSource;
+    public AudioSource audioClipSource;
     public Collider surface;
     [HideInInspector]
     public OutputUI outputUI;
@@ -50,6 +46,8 @@ public class StimulationOutput : MonoBehaviour {
 
     public void setStereoPan(int pan) {
         signalGenerator.stereoPan = pan;
+        audioClipSource.panStereo = pan;
+        audioSource.panStereo = pan;
     }
 
     //Contact
@@ -108,10 +106,10 @@ public class StimulationOutput : MonoBehaviour {
                 SignalData sd = cp.touchable.onContact(cp);
 
                 //Equalization
-                if (doEqualization) {
-                    if (sd.sineAmplitude > 0) Mathf.Clamp01(sd.sineAmplitude *= equalization.Evaluate(sd.sineFrequency));
-                    if (sd.sawAmplitude > 0) Mathf.Clamp01(sd.sawAmplitude *= equalization.Evaluate(sd.sawFrequency));
-                    if (sd.squareAmplitude > 0) Mathf.Clamp01(sd.squareAmplitude *= equalization.Evaluate(sd.squareFrequency));
+                if (EqualizationReference.instance.doEqualization) {
+                    if (sd.sineAmplitude > 0) Mathf.Clamp01(sd.sineAmplitude *= EqualizationReference.instance.signalEqualization.Evaluate(sd.sineFrequency));
+                    if (sd.sawAmplitude > 0) Mathf.Clamp01(sd.sawAmplitude *= EqualizationReference.instance.signalEqualization.Evaluate(sd.sawFrequency));
+                    if (sd.squareAmplitude > 0) Mathf.Clamp01(sd.squareAmplitude *= EqualizationReference.instance.signalEqualization.Evaluate(sd.squareFrequency));
                 }
                 signalGenerator.loadPreset(sd);
 

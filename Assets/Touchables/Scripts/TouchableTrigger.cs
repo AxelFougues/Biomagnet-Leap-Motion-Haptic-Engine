@@ -36,7 +36,8 @@ public class TouchableTrigger : Touchable{
             isTriggered = true;
             OnTriggered?.Invoke();
             if (triggerFeedback != null && stimulationOutput != null) {
-                stimulationOutput.audioSource.PlayOneShot(triggerFeedback);
+                if (EqualizationReference.instance.doEqualization) stimulationOutput.audioClipSource.volume = EqualizationReference.instance.audioClipEqualization;
+                stimulationOutput.audioClipSource.PlayOneShot(triggerFeedback);
             }
         }
     }
