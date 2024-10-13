@@ -15,7 +15,8 @@ public class TouchableTrigger : Touchable{
     [Space]
     [Header("Audio Feedback")]
     [Space]
-
+    [Range(0, 1)]
+    public float eqOverride = 0;
     public AudioClip triggerFeedback;
 
     [Space]
@@ -36,7 +37,8 @@ public class TouchableTrigger : Touchable{
             isTriggered = true;
             OnTriggered?.Invoke();
             if (triggerFeedback != null && stimulationOutput != null) {
-                if (EqualizationReference.instance.doEqualization) stimulationOutput.audioClipSource.volume = EqualizationReference.instance.audioClipEqualization;
+                if(eqOverride > 0) stimulationOutput.audioClipSource.volume = eqOverride;
+                else if (EqualizationReference.instance.doEqualization) stimulationOutput.audioClipSource.volume = EqualizationReference.instance.audioClipEqualization;
                 stimulationOutput.audioClipSource.PlayOneShot(triggerFeedback);
             }
         }

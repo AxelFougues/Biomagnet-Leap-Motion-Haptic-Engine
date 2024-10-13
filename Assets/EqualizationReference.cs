@@ -6,20 +6,6 @@ using UnityEngine.UI;
 public class EqualizationReference : MonoBehaviour{
     public static EqualizationReference instance;
 
-    private void Awake() {
-        instance = this;
-    }
-
-    private void Start() {
-        if (doEQToggle != null) doEQToggle.isOn = doEqualization;
-        int i = 30;
-        foreach(Slider s in sliders) {
-            s.value = signalEqualization.Evaluate(i);
-            i += 30;
-        }
-        audioClipsSlider.value = audioClipEqualization;
-    }
-
     public bool doEqualization = true;
     public AnimationCurve signalEqualization;
     [Range(0, 1)]
@@ -33,11 +19,29 @@ public class EqualizationReference : MonoBehaviour{
     public List<Slider> sliders;
     public Slider audioClipsSlider;
 
+    bool initialized = false;
+
+    private void Awake() {
+        instance = this;
+    }
+
+    private void Start() {
+        if (doEQToggle != null) doEQToggle.isOn = doEqualization;
+        int i = 30;
+        foreach(Slider s in sliders) {
+            s.value = signalEqualization.Evaluate(i);
+            i += 30;
+        }
+        audioClipsSlider.value = audioClipEqualization;
+        initialized = true;
+    }
+
     public void onDoEqualization(bool value) {
         doEqualization = value;
     }
 
     public void onValueChanged(float value) {
+        if (!initialized) return;
         signalEqualization.ClearKeys();
         int i = 30;
         foreach (Slider s in sliders) {
