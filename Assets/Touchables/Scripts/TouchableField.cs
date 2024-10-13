@@ -1,8 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using static SignalData;
-using VectorField;
 
 public class TouchableField : Touchable{
 
@@ -51,7 +48,7 @@ public class TouchableField : Touchable{
 
             float strengthEffectNormalizedValue = 0;
             strengthEffectNormalizedValue = strengthResponse.Evaluate(vectorField.getStrength(cp.stimulationOutput.transform));
-            si.set(strengthEffect, mapValue(strengthEffectNormalizedValue, 0, 1, minPressureEffectValue, maxPressureEffectValue));
+            si.set(strengthEffect, mapValue(strengthEffectNormalizedValue, 0, 1, minStrengthEffectValue, maxStrengthEffectValue));
             
         }
 
@@ -59,7 +56,7 @@ public class TouchableField : Touchable{
 
             float directionEffectNormalizedValue = 0;
             directionEffectNormalizedValue = directionResponse.Evaluate(vectorField.sampleAlignementNormalized(cp.stimulationOutput.transform));
-            si.set(directionEffect, mapValue(directionEffectNormalizedValue, 0, 1, minPressureEffectValue, maxPressureEffectValue));
+            si.set(directionEffect, mapValue(directionEffectNormalizedValue, 0, 1, minDirectionEffectValue, maxDirectionEffectValue));
 
         }
 

@@ -35,7 +35,7 @@ namespace VectorField {
             Quaternion localRotation = Quaternion.Euler(getDirection(position));
             return Quaternion.Angle(rotation, localRotation);
         }
-        public float sampleAlignementNormalized(Vector3 position, Quaternion rotation) { return 1f - sampleAlignement(position, rotation) / 180f; }
+        public float sampleAlignementNormalized(Vector3 position, Quaternion rotation) { return sampleAlignement(position, rotation) / 180f; }
         public float sampleAlignement(Transform transform) { return sampleAlignement(transform.position, transform.rotation); }
         public float sampleAlignementNormalized(Transform transform) { return sampleAlignementNormalized(transform.position, transform.rotation); }
 
