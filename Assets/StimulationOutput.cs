@@ -58,15 +58,17 @@ public class StimulationOutput : MonoBehaviour {
         if (activeContacts.ContainsKey(id)) {
             activeContacts[id].collidesDuringFrame = true;
             return;
-        }
-        Touchable t = other.GetComponent<Touchable>();
-        if (t != null) {
-            ContactParameters cp = new ContactParameters(surface.transform.position, t, this);
-            cp.collidesDuringFrame = true;
-            activeContacts.Add(id, cp);
-            t.onContactStart(this);
-            triggerFilters.Add(id, new RollingAverageFilter(COLLISION_SMOOTHING_BUFFER));
-        }
+        } else {
+            Touchable t = other.GetComponent<Touchable>();
+            if (t != null) {
+                ContactParameters cp = new ContactParameters(surface.transform.position, t, this);
+                cp.collidesDuringFrame = true;
+                activeContacts.Add(id, cp);
+                t.onContactStart(this);
+                if(triggerFilters.ContainsKey(id)) triggerFilters.Remove(id);
+                triggerFilters.Add(id, new RollingAverageFilter(COLLISION_SMOOTHING_BUFFER));
+            }
+       }
         
     }
 
@@ -131,11 +133,7 @@ public class StimulationOutput : MonoBehaviour {
     private void OnTriggerExit(Collider other) {
         int id = other.GetInstanceID();
         if (activeContacts.ContainsKey(id)) {
-
             activeContacts[id].collidesDuringFrame = false;
-            //activeContacts[id].touchable.onContactEnd();
-            //activeContacts.Remove(id);
-            //exitCleanup();
         }
         
     }
@@ -145,6 +143,7 @@ public class StimulationOutput : MonoBehaviour {
             cp.Value.touchable.onContactEnd(this);
         }
         activeContacts.Clear();
+        triggerFilters.Clear();
         exitCleanup();
     }
 
