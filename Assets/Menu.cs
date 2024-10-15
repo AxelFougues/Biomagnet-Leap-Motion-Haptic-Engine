@@ -10,8 +10,7 @@ public class Menu : MonoBehaviour{
 
     private void Start() {
         exit.onClick.AddListener(delegate {
-            if(Application.isEditor) UnityEditor.EditorApplication.isPlaying = false;
-            else Application.Quit();
+            Application.Quit();
         });
         lodetones.onClick.AddListener(delegate { Application.OpenURL("https://github.com/AxelFougues/Lodestone-biomagnet-tools"); });
         engine.onClick.AddListener(delegate { Application.OpenURL("https://github.com/AxelFougues/Biomagnet-Leap-Motion-Haptic-Engine"); });
