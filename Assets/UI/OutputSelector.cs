@@ -15,6 +15,11 @@ public class OutputSelector : MonoBehaviour{
 
     public StimulationOutput stimulationOutput;
 
+    private void Awake() {
+        toggleLeft.onValueChanged.AddListener(onToggleLeft);
+        toggleRight.onValueChanged.AddListener(onToggleRight);
+    }
+
     private void Start() {
         idText.text = matchingID;
         stimulationOutput.gameObject.SetActive(toggleLeft.isOn || toggleRight.isOn);
@@ -27,6 +32,7 @@ public class OutputSelector : MonoBehaviour{
             stimulationOutput.setStereoPan(-1);
         }
         stimulationOutput.gameObject.SetActive(toggleLeft.isOn || toggleRight.isOn);
+        Debug.Log(stimulationOutput.name + " " + stimulationOutput.gameObject.activeSelf);
     }
 
     void onToggleRight(bool value) {
@@ -34,6 +40,7 @@ public class OutputSelector : MonoBehaviour{
             stimulationOutput.setStereoPan(1);
         }
         stimulationOutput.gameObject.SetActive(toggleLeft.isOn || toggleRight.isOn);
+        Debug.Log(stimulationOutput.name + " " + stimulationOutput.gameObject.activeSelf);
     }
 
 }
